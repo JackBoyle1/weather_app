@@ -1,14 +1,21 @@
 <template>
   <div :class="`weather-app ${backgroundColour}`">
-    <div class="content">
-      <h1 class="text-9xl pb-8">{{ isWearACoat }}</h1>
-      <p v-if="comments.length > 0">It's {{ formattedComments }}.</p>
+    <div class="text-center w-1/4">
+      <Location v-if="showSearch" :value="location" @input="location = $event" @submit-search="asyncData"/>
+      <Results v-else :comments="comments" :isWearACoat="isWearACoat" />
     </div>
   </div>
 </template>
 
 <script>
+import Location from "@/components/Location.vue";
+import Results from "@/components/Results.vue";
+
 export default {
+  components: {
+    Location,
+    Results,
+  },
   props: {
     config: {
       type: Object,
@@ -17,6 +24,7 @@ export default {
   },
   data() {
     return {
+      showSearch: true,
       postData: {},
       minTemp: null,
       maxTemp: null,
@@ -26,11 +34,8 @@ export default {
       conditions: "",
       comments: [],
       precipitationProb: 0,
+      location: "",
     };
-  },
-  mounted() {
-    this.asyncData();
-    this.updateComments();
   },
   computed: {
     isWearACoat() {
@@ -42,30 +47,29 @@ export default {
         : "Nah, no need";
     },
     backgroundColour() {
-      return this.isWearACoat === "Yep" ? "bg-green-300" : "bg-red-300";
-    },
-    formattedComments() {
-      if (this.comments.length > 1) {
-        return (
-          this.comments.slice(0, -1).join(", ") +
-          ", and " +
-          this.comments.slice(-1)
-        );
-      } else if (this.comments.length === 1) {
-        return this.comments[0];
+      if (this.showSearch) {
+        return "bg-indigo-200";
+      } else if (this.isWearACoat === "Yep") {
+        return "bg-green-300";
       } else {
-        return "";
+        return "bg-red-300";
       }
     },
   },
   methods: {
     async asyncData() {
-      const response = await fetch(
-        //TODO: change this to ask the user for the location
-        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/slough?unitGroup=metric&key=${this.config.public.API_KEY}&contentType=json`
-      );
+      try {
+      const response = await fetch(`/.netlify/functions/weather?location=${location}`);
+      //   const response = await fetch(
+      //   //TODO: change this to ask the user for the location
+      //   `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${this.location}?unitGroup=metric&key=${this.config.public.API_KEY}&contentType=json`
+      // );
       this.postData = await response.json();
       this.updateComments();
+      this.showSearch = !this.showSearch;
+      } catch (error) {
+        throw new Error('Oops! Something went wrong');
+      }
     },
     updateComments() {
       this.comments = [];
@@ -100,12 +104,6 @@ export default {
   min-height: 100vh;
 }
 
-.content {
-  max-width: 600px;
-  text-align: center;
-  padding: 20px;
-}
-
 h1 {
   color: #333;
 }
@@ -122,5 +120,15 @@ ul {
 li {
   color: #009688;
   font-weight: bold;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
 }
 </style>
