@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import Location from "@/components/Location.vue";
 import Results from "@/components/Results.vue";
 
@@ -59,12 +60,9 @@ export default {
   methods: {
     async asyncData() {
       try {
-      const response = await fetch(`/.netlify/functions/weather?location=${location}`);
-      //   const response = await fetch(
-      //   //TODO: change this to ask the user for the location
-      //   `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${this.location}?unitGroup=metric&key=${this.config.public.API_KEY}&contentType=json`
-      // );
-      this.postData = await response.json();
+        await axios.post("/.netlify/functions/weather", {
+        location: this.location,
+      });
       this.updateComments();
       this.showSearch = !this.showSearch;
       } catch (error) {
