@@ -1,5 +1,5 @@
 exports.handler = async (event) => {
-  let requestParams = JSON.parse(event.body);
+  const requestParams = JSON.parse(event.body);
 
   try {
     const response = await fetch(
