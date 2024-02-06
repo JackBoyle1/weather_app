@@ -1,7 +1,7 @@
 <template>
   <div :class="`weather-app ${backgroundColour}`">
     <div class="text-center w-1/4">
-      <Location v-if="showSearch" :value="location" @input="location = $event" @submit-search="asyncData"/>
+      <Location v-if="showSearch" :value="location" @input="location = $event.target.value" @submit-search="requestWeather"/>
       <Results v-else :comments="comments" :isWearACoat="isWearACoat" />
     </div>
   </div>
@@ -58,7 +58,7 @@ export default {
     },
   },
   methods: {
-    async asyncData() {
+    async requestWeather() {
       try {
         await axios.post("/.netlify/functions/weather", {
         location: this.location,
