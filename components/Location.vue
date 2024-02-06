@@ -1,7 +1,7 @@
 <template>
   <div>
-    <!-- <label class="mb-2" for="location">Location</label> -->
     <div class="input-container">
+      <img src="@/assets/img/should_i_wear.png"/>
       <input
         v-model="localLocation"
         @input="updateParentLocation"
@@ -11,7 +11,8 @@
         type="text"
         placeholder="Please type out your location..."
       />
-      <span class="search-icon" @click="submitSearch">&#128269;</span>
+      <span class="search-icon pb-12" @click="submitSearch">&#128269;</span>
+      <img class="pt-11" src="@/assets/img/coat.png"/>
     </div>
   </div>
 </template>
