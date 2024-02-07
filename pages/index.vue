@@ -1,8 +1,11 @@
 <template>
   <div :class="`weather-app ${backgroundColour}`">
     <div class="text-center w-1/4">
-      <Location v-if="showSearch" :value="location" @input="location = $event.target.value" @submit-search="requestWeather"/>
-      <Results v-else :comments="comments" :isWearACoat="isWearACoat" />
+      <div v-if="!loading">
+        <Location v-if="showSearch" :value="location" @input="location = $event.target.value" @submit-search="requestWeather"/>
+        <Results v-else :comments="comments" :isWearACoat="isWearACoat" @back="showSearch = true" />
+      </div>
+      <Spinner v-else/>
     </div>
   </div>
 </template>
@@ -11,11 +14,13 @@
 import axios from "axios";
 import Location from "@/components/Location.vue";
 import Results from "@/components/Results.vue";
+import Spinner from "@/components/Spinner.vue"
 
 export default {
   components: {
     Location,
     Results,
+    Spinner,
   },
   props: {
     config: {
@@ -25,6 +30,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       showSearch: true,
       postData: {},
       minTemp: null,
@@ -59,6 +65,7 @@ export default {
   },
   methods: {
     async requestWeather() {
+      this.loading = true;
       try {
         await axios.post("/.netlify/functions/weather", {
         location: this.location,
@@ -68,6 +75,7 @@ export default {
       } catch (error) {
         throw new Error('Oops! Something went wrong');
       }
+      this.loading = false;
     },
     updateComments() {
       this.comments = [];

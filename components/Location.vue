@@ -3,11 +3,6 @@
     <div class="input-container">
       <img src="@/assets/img/should_i_wear.png" />
       <div class="flex">
-        <label
-          for="search-dropdown"
-          class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-          >Your Email</label
-        >
         <div class="relative w-full">
           <input
             id="location"
@@ -15,7 +10,7 @@
             @input="updateParentLocation"
             @keydown.enter="submitSearch"
             type="search"
-            class="block w-full px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-800"
+            class="text-center block w-full px-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-800"
             placeholder="Please type out your location..."
             required
           />

@@ -1,10 +1,20 @@
 <template>
   <h1 class="text-9xl pb-8">{{ isWearACoat }}</h1>
-  <p v-if="comments.length > 0">It's {{ formattedComments }}.</p>
+  <p class="text-gray-600" v-if="comments.length > 0">
+    It's {{ formattedComments }}.
+  </p>
+  <div class="pt-8 flex items-center justify-center">
+    <GoBackButton @back="$emit('back')" />
+  </div>
 </template>
 
 <script>
+import GoBackButton from "@/components/GoBackButton.vue";
+
 export default {
+  components: {
+    GoBackButton,
+  },
   props: {
     isWearACoat: {
       type: String,
