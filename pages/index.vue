@@ -1,6 +1,6 @@
 <template>
   <div :class="`weather-app ${backgroundColour}`">
-    <div class="text-center w-1/4">
+    <div class="text-center lg:w-1/4 md:w-1/3 sm: w-4/5">
       <div v-if="!loading">
         <Location
           v-if="showSearch"
@@ -87,7 +87,6 @@ export default {
         this.updateComments();
         this.showSearch = !this.showSearch;
       } catch (error) {
-        console.log(error);
         throw new Error("Oops! Something went wrong");
       }
       this.loading = false;
@@ -136,7 +135,6 @@ export default {
 
       let hour = currentHour + 1;
       while (hour < 24 && hour < currentHour + 5) {
-        console.log(hour);
         futurePrecipProbs.push(data.days[0].hours[hour].precipprob);
         hour++;
       }
@@ -148,7 +146,6 @@ export default {
         }
       });
       
-      console.log(highestPrecipProb);
       return highestPrecipProb;
     },
     lowestForecastedTemperature(data) {
@@ -171,7 +168,6 @@ export default {
         }
       });
 
-      console.log(lowestTemp);
       return lowestTemp;
     },
   },
