@@ -3,7 +3,7 @@
   <p class="text-gray-600" v-if="comments.length > 0">
     It's {{ formattedComments }}.
   </p>
-  <div class="pt-8 flex items-center justify-center">
+  <div class="pt-20 flex items-center justify-center">
     <GoBackButton @back="$emit('back')" />
   </div>
 </template>
