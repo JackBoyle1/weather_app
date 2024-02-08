@@ -12,7 +12,7 @@
           v-else
           :comments="comments"
           :isWearACoat="isWearACoat"
-          @back="showSearch = true"
+          @back="goBack"
         />
       </div>
       <Spinner v-else />
@@ -55,19 +55,26 @@ export default {
       comments: [],
       precipitationProb: 0,
       location: "",
+      isError: false,
     };
   },
   computed: {
     isWearACoat() {
-      return this.minTemp <= 10 ||
+      if (this.isError) {
+        return "Oops! Something went wrong";
+      } else {
+        return this.minTemp <= 10 ||
         this.snow > 0 ||
         this.conditions.includes("Rain") ||
         this.precipitationProb >= 5
         ? "Yep"
         : "Nah, no need";
+      }
     },
     backgroundColour() {
-      if (this.showSearch) {
+      if (this.isError) {
+        return "bg-gray-300"
+      } else if (this.showSearch) {
         return "bg-indigo-200";
       } else if (this.isWearACoat === "Yep") {
         return "bg-green-300";
@@ -85,10 +92,14 @@ export default {
         });
         this.updateValues(response.data);
         this.updateComments();
-        this.showSearch = !this.showSearch;
       } catch (error) {
+        this.updateComments();
+        this.isError = true;
+        this.showSearch = false;
+        this.loading = false;
         throw new Error("Oops! Something went wrong");
       }
+      this.showSearch = false;
       this.loading = false;
     },
     updateValues(data) {
@@ -170,6 +181,10 @@ export default {
 
       return lowestTemp;
     },
+    goBack() {
+      this.isError = false;
+      this.showSearch = true
+    }
   },
 };
 </script>
