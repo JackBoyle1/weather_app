@@ -1,5 +1,5 @@
 <template>
-  <h1 class="text-9xl pb-8">{{ isWearACoat }}</h1>
+  <h1 class="xl:text-9xl lg:text-9xl md:text-8xl sm:text-8xl xs:text-6xl pb-8 flex justify-center">{{ isWearACoat }}</h1>
   <p class="text-gray-600" v-if="comments.length > 0">
     It's {{ formattedComments }}.
   </p>

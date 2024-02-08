@@ -4,9 +4,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'sans': ['Open Sans', 'sans-serif']
-      }
+        sans: ["Open Sans", "sans-serif"],
+      },
+      screens: { xs: { max: "639px" }, },
     },
   },
   plugins: [],
-}
+};
