@@ -44,11 +44,10 @@ export default {
       showSearch: true,
       highestForecastedPrecip: null,
       lowestForecastedTemp: null,
-      currentTemp: null,
       windspeed: null,
       willItRain: "",
       willItGetCold: "",
-      snow: 0,
+      isSnowing: false,
       conditions: "",
       comments: [],
       precipitationProb: 0,
@@ -63,7 +62,7 @@ export default {
       } else {
         return this.feelsLike <= 10 ||
           this.lowestForecastedTemp <= 10 ||
-          this.snow > 0 ||
+          this.isSnowing ||
           this.conditions.includes("Rain") ||
           this.precipitationProb >= 5
           ? "Yep"
@@ -105,16 +104,15 @@ export default {
       this.highestForecastedPrecip =
         this.highestForecastedPrecipitationOdds(data);
       this.lowestForecastedTemp = this.lowestForecastedTemperature(data);
-      this.currentTemp = data.currentConditions.temp;
-      (this.windspeed = data.currentConditions.windspeed),
-        (this.snow = data.currentConditions.snow),
-        (this.conditions = data.currentConditions.conditions),
-        (this.precipitationProb = data.currentConditions.precipprob);
+      (this.windspeed = data.currentWindspeed),
+        (this.snow = data.isSnowing),
+        (this.conditions = data.conditions),
+        (this.precipitationProb = data.precipitationProbability);
     },
     updateComments() {
       this.comments = [];
 
-      if (this.snow > 0) {
+      if (this.isSnowing) {
         this.comments.push("snowing");
       } else if (this.feelsLike > 0 && this.feelsLike <= 10) {
         this.comments.push("cold");
@@ -134,22 +132,22 @@ export default {
           this.highestForecastedPrecip >= 5 &&
           this.highestForecastedPrecip <= 50
         ) {
-          this.comments.push("might rain");
+          this.comments.push("got a chance of raining");
         } else if (this.highestForecastedPrecip > 50) {
-          this.comments.push("will probably rain");
+          this.comments.push("probably going to rain");
         }
       }
     },
     highestForecastedPrecipitationOdds(data) {
       const date = new Date(
-        "1970-01-01T" + data.currentConditions.datetime + "Z"
+        "1970-01-01T" + data.time + "Z"
       );
       const currentHour = date.getHours();
       let futurePrecipProbs = [];
 
       let hour = currentHour + 1;
       while (hour < 24 && hour < currentHour + 5) {
-        futurePrecipProbs.push(data.days[0].hours[hour].precipprob);
+        futurePrecipProbs.push(data.todayData.hours[hour].precipprob);
         hour++;
       }
 
@@ -164,14 +162,14 @@ export default {
     },
     lowestForecastedTemperature(data) {
       const date = new Date(
-        "1970-01-01T" + data.currentConditions.datetime + "Z"
+        "1970-01-01T" + data.time + "Z"
       );
       const currentHour = date.getHours();
       let futureTemps = [];
 
       let hour = currentHour + 1;
       while (hour < 24 && hour < currentHour + 5) {
-        futureTemps.push(data.days[0].hours[hour].temp);
+        futureTemps.push(data.todayData.hours[hour].temp);
         hour++;
       }
 

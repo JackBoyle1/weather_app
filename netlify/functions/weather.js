@@ -11,10 +11,20 @@ exports.handler = async (event) => {
     }
 
     const jsonData = await response.json();
+    const body = {
+      time: jsonData.currentConditions?.datetime,
+      currentTemperature: jsonData.currentConditions?.feelslike,
+      currentWindspeed: jsonData.currentConditions?.windspeed,
+      isSnowing: !!(jsonData.currentConditions?.snow),
+      precipitationProbability: jsonData.currentConditions?.precipprob,
+      conditions: jsonData.currentConditions?.conditions,
+      todayData: jsonData.days?.[0],
+      tomorrowData: jsonData.days?.[1],
+    }
 
     return {
       statusCode: 200,
-      body: JSON.stringify(jsonData),
+      body: JSON.stringify(body),
     };
   } catch (error) {
     return {
