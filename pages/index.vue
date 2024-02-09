@@ -169,7 +169,7 @@ export default {
 
       let hour = currentHour + 1;
       while (hour < 24 && hour < currentHour + 5) {
-        futureTemps.push(data.todayData.hours[hour].temp);
+        futureTemps.push(data.todayData.hours[hour].feelslike);
         hour++;
       }
 
