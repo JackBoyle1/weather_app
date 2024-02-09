@@ -64,7 +64,7 @@ export default {
           this.lowestForecastedTemp <= 10 ||
           this.isSnowing ||
           this.conditions.includes("Rain") ||
-          this.precipitationProb >= 5
+          this.highestForecastedPrecip >= 5
           ? "Yep"
           : "Nah";
       }
