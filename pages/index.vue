@@ -139,17 +139,11 @@ export default {
       }
     },
     highestForecastedPrecipitationOdds(data) {
-      const date = new Date(
-        "1970-01-01T" + data.time + "Z"
-      );
-      const currentHour = date.getHours();
       let futurePrecipProbs = [];
 
-      let hour = currentHour + 1;
-      while (hour < 24 && hour < currentHour + 5) {
-        futurePrecipProbs.push(data.todayData.hours[hour].precipprob);
-        hour++;
-      }
+      data.daysData.forEach(day => {
+        futurePrecipProbs.push(day.precipprob);
+      });
 
       let highestPrecipProb = futurePrecipProbs[0];
       futurePrecipProbs.forEach((precipProb) => {
@@ -161,17 +155,11 @@ export default {
       return highestPrecipProb;
     },
     lowestForecastedTemperature(data) {
-      const date = new Date(
-        "1970-01-01T" + data.time + "Z"
-      );
-      const currentHour = date.getHours();
       let futureTemps = [];
 
-      let hour = currentHour + 1;
-      while (hour < 24 && hour < currentHour + 5) {
-        futureTemps.push(data.todayData.hours[hour].feelslike);
-        hour++;
-      }
+      data.daysData.forEach(day => {
+        futureTemps.push(day.feelslike);
+      });
 
       let lowestTemp = futureTemps[0];
       futureTemps.forEach((temp) => {
