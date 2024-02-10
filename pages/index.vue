@@ -58,15 +58,15 @@ export default {
   computed: {
     isWearACoat() {
       if (this.isError) {
-        return "Oops! Something went wrong";
+        return this.$t('messages.error');
       } else {
         return this.feelsLike <= 10 ||
           this.lowestForecastedTemp <= 10 ||
           this.isSnowing ||
           this.conditions.includes("Rain") ||
           this.highestForecastedPrecip >= 5
-          ? "Yep"
-          : "Nah";
+          ? this.$t('messages.yes')
+          : this.$t('messages.no');
       }
     },
     backgroundColour() {
@@ -74,7 +74,7 @@ export default {
         return "bg-gray-300";
       } else if (this.showSearch) {
         return "bg-indigo-200";
-      } else if (this.isWearACoat === "Yep") {
+      } else if (this.isWearACoat === this.$t('messages.yes')) {
         return "bg-green-300";
       } else {
         return "bg-red-300";
@@ -95,7 +95,7 @@ export default {
         this.isError = true;
         this.showSearch = false;
         this.loading = false;
-        throw new Error("Oops! Something went wrong");
+        throw new Error(this.$t('messages.error'));
       }
       this.showSearch = false;
       this.loading = false;
